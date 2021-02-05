@@ -33,6 +33,8 @@ def is_bloked(border_grid, current_point,):
                 return False            
 
 
+
+
 def is_valid(currentpoint):
     if currentpoint[0] > 27 or currentpoint[0] < 0:
         return False
