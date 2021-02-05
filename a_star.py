@@ -50,13 +50,14 @@ def is_endpoint(currentpoint):
 def calculateHvalue(currentpoint,dest_x, dest_y):
     return math.sqrt(((currentpoint[0]-dest_x)*(currentpoint[0]-dest_x))+(currentpoint[1]-dest_y)+(currentpoint[1]-y))
 
-def aStarbegin(border_grid,start_x,start_y,end_x,end_y):
+def aStarbegin(border_grid,start_x,start_y,end_x,end_y,currentpoint):
     start_arry=[start_x,start_y]
     end_array=[end_x,end_y]       
     if is_bloked(border_grid,start_arry) or is_bloked(border_grid,end_array):
         print("point is blocked")
         return 
-
+    arr = [[0 for i in range(cols)] for j in range(rows)]   
+    
 grid = []
 for row in range(28):
     # Add an empty array that will hold each cell
