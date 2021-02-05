@@ -1,6 +1,7 @@
 #the popular path finding algortythm in python
 
 import pygame
+import math
  
 # Define some colors
 BLACK = (0, 0, 0)
@@ -18,6 +19,44 @@ MARGIN = 5
  
 # Create a 2 dimensional array. A two dimensional
 # array is simply a list of lists.
+def is_bloked(border_grid, current_point,):
+    x = current_point[0]
+    y = current_point[1]
+    f= 0
+    for i in border_grid:
+        if x == border_grid[f][0] and y == border_grid[f][1]:
+            f +=1
+            return True
+        else:
+            f +=1
+            if f == len(border_grid):
+                return False            
+
+
+def is_valid(currentpoint):
+    if currentpoint[0] > 27 or currentpoint[0] < 0:
+        return False
+    elif currentpoint[1]> 51 or currentpoint[1] < 0:
+        return False
+    else:
+        return True
+
+def is_endpoint(currentpoint):
+    if currentpoint[0] == endpoint_x and currentpoint[1] == endpoint_y:
+        return True
+    else:
+        return False
+
+def calculateHvalue(currentpoint,dest_x, dest_y):
+    return math.sqrt(((currentpoint[0]-dest_x)*(currentpoint[0]-dest_x))+(currentpoint[1]-dest_y)+(currentpoint[1]-y))
+
+def aStarbegin(border_grid,start_x,start_y,end_x,end_y):
+    start_arry=[start_x,start_y]
+    end_array=[end_x,end_y]       
+    if is_bloked(border_grid,start_arry) or is_bloked(border_grid,end_array):
+        print("point is blocked")
+        return 
+
 grid = []
 for row in range(28):
     # Add an empty array that will hold each cell
@@ -25,7 +64,9 @@ for row in range(28):
     grid.append([])
     for column in range(51):
         grid[row].append(0)  # Append a cell
- 
+
+grid_clean = grid
+
 border_grid =[]
 
 # Initialize pygame
@@ -91,6 +132,7 @@ while not done:
                     color = RED
             if grid[row][column] == 3:
                 color = GREY
+                aStarbegin(border_grid,startpoint_x,startpoint_y,endpoint_x,endpoint_y)
             pygame.draw.rect(screen,
                             color,
                             [(MARGIN + WIDTH) * column + MARGIN,
@@ -98,6 +140,7 @@ while not done:
                             WIDTH,
                             HEIGHT])
                               
+
  
     # Limit to 60 frames per second
     clock.tick(60)
@@ -107,4 +150,6 @@ while not done:
  
 # Be IDLE friendly. If you forget this line, the program will 'hang'
 # on exit.
+
+
 pygame.quit()
