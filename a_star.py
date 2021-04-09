@@ -8,7 +8,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 GREY = (112,128,144)
-RED = (255, 0, 0)
+RED = (255,0,0)
+BLUE = (30,144,255)
  
 # This sets the WIDTH and HEIGHT of each grid location
 WIDTH = 20
@@ -31,50 +32,6 @@ class Node():
     def __eq__(self, other):
         return self.position == other.position
 
- 
-# Create a 2 dimensional array. A two dimensional
-# array is simply a list of lists.
-def is_bloked(border_grid, current_point,):
-    x = current_point[0]
-    y = current_point[1]
-    f= 0
-    for i in border_grid:
-        if x == border_grid[f][0] and y == border_grid[f][1]:
-            f +=1
-            return True
-        else:
-            f +=1
-            if f == len(border_grid):
-                return False            
-
-
-
-
-def is_valid(currentpoint):
-    if currentpoint[0] > 27 or currentpoint[0] < 0:
-        return False
-    elif currentpoint[1]> 51 or currentpoint[1] < 0:
-        return False
-    else:
-        return True
-
-def is_endpoint(currentpoint):
-    if currentpoint[0] == endpoint_x and currentpoint[1] == endpoint_y:
-        return True
-    else:
-        return False
-
-def calculateHvalue(currentpoint,dest_x, dest_y):
-    return math.sqrt(((currentpoint[0]-dest_x)*(currentpoint[0]-dest_x))+(currentpoint[1]-dest_y)+(currentpoint[1]-y))
-
-def aStarbegin(border_grid,start_x,start_y,end_x,end_y,currentpoint):
-    start_arry=[start_x,start_y]
-    end_array=[end_x,end_y]       
-    if is_bloked(border_grid,start_arry) or is_bloked(border_grid,end_array):
-        print("point is blocked")
-        return 
-    #arr = [[0 for i in range(cols)] for j in range(rows)]   
-    
 def a_star(maze,start_x, start_y,end_x, end_y):
     start = (start_x, start_y)
     end = (end_x, end_y)
@@ -176,6 +133,13 @@ for row in range(28):
     for column in range(51):
         border_grid[row].append(0)  # Append a cell
 
+path_grid = []
+for row in range(28):
+    # Add an empty array that will hold each cell
+    # in this row
+    path_grid.append([])
+    for column in range(51):
+        path_grid[row].append(0)  # Append a cell
 
 # Initialize pygame
 pygame.init()
@@ -225,15 +189,18 @@ while not done:
                 #border_grid.append([row,column])
                 border_grid[row][column] = 1
                 grid[row][column] = 3
+                calculated = False
                 path = a_star(border_grid,startpoint_x,startpoint_y, endpoint_x, endpoint_y)
-                print (path)
-                print("Click ", pos, "Grid coordinates: ", row, column)
+                #print (path)
+                for point in path:
+                    grid[point[0]][point[1]]= 4
+                calculated = True
+                #print("Click ", pos, "Grid coordinates: ", row, column)
  
     # Set the screen background
     screen.fill(BLACK)
  
     # Draw the grid
-    
     for row in range(28):
         for column in range(51):
             color = WHITE
@@ -243,7 +210,10 @@ while not done:
                     color = RED
             if grid[row][column] == 3:
                 color = GREY
-                aStarbegin(border_grid,startpoint_x,startpoint_y,endpoint_x,endpoint_y,border_grid[len(border_grid)-1])
+            if grid[row][column] == 4:
+                color =BLUE
+            
+                # change color back from path color
             pygame.draw.rect(screen,
                             color,
                             [(MARGIN + WIDTH) * column + MARGIN,
